@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.IO;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace MMCS_LHM
@@ -15,6 +10,9 @@ namespace MMCS_LHM
     {
         private help_functions func = new help_functions();
         private HeadersInfo hi = new HeadersInfo();
+
+        private int maxNumberOfBlinks = 5;
+        private int blinkCount = 0;
 
         private int current_length = 0;
         private int ver_changed_id = -1;
@@ -76,6 +74,13 @@ namespace MMCS_LHM
         {
             ListView.SelectedListViewItemCollection mdonor = this.listView2.SelectedItems;
             ListView.SelectedListViewItemCollection mcurrent = this.listView1.SelectedItems;
+
+            if (mcurrent.Count == 0 || mdonor.Count == 0)
+            {
+                Info("Error: please, select unit for current and donor!");
+                return;
+            }
+
             int current_id = Convert.ToInt32(mcurrent[0].SubItems[0].Text) - 1;
             if (this.adv_mode == true)
             {
@@ -96,6 +101,13 @@ namespace MMCS_LHM
         {
             ListView.SelectedListViewItemCollection mdonor = this.listView2.SelectedItems;
             ListView.SelectedListViewItemCollection mcurrent = this.listView1.SelectedItems;
+
+            if (mcurrent.Count == 0 || mdonor.Count == 0)
+            {
+                Info("Error: please, select unit for current and donor!");
+                return;
+            }
+
             int current_id = Convert.ToInt32(mcurrent[0].SubItems[0].Text) - 1;
             if (this.adv_mode == true)
             {
@@ -119,16 +131,42 @@ namespace MMCS_LHM
             ListViewItem.ListViewSubItem sel_subitem = sel_item.GetSubItemAt(e.X, e.Y);
             int subitem_id = sel_item.SubItems.IndexOf(sel_subitem);
 
-            if (subitem_id == 2)
+            if (subitem_id == 1 || subitem_id == 2)
             {
                 int eleft = sel_subitem.Bounds.Left + 2;
                 int ewidth = sel_subitem.Bounds.Width;
-                this.version_edit.Bounds = new Rectangle(eleft + this.listView1.Left, sel_subitem.Bounds.Top + this.listView1.Top, 
+                TextBox hedit = (subitem_id == 1) ? this.name_edit : this.version_edit;
+                hedit.Bounds = new Rectangle(eleft + this.listView1.Left, sel_subitem.Bounds.Top + this.listView1.Top,
                     ewidth, sel_subitem.Bounds.Height);
-                this.version_edit.Text = sel_subitem.Text;
-                this.version_edit.Show();
-                this.version_edit.Focus();
+                hedit.Text = sel_subitem.Text;
+                hedit.Show();
+                hedit.Focus();
             }
+        }
+
+        private void name_edit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            char pressed = e.KeyChar;
+            if (pressed == (char)Keys.Return)
+            {
+                e.Handled = true;
+                this.name_edit.Hide();
+                if (this.ver_changed_id != -1)
+                {
+                    this.hi.change_MIIName(this.ver_changed_id, this.name_edit.Text);
+                    getHeaderInfo(this.hi.hnew, this.listView1);
+                }
+            }
+            else if (pressed == (char)Keys.Escape)
+            {
+                e.Handled = true;
+                this.name_edit.Hide();
+            }
+        }
+
+        private void name_edit_Leave(object sender, EventArgs e)
+        {
+            this.name_edit.Hide();
         }
 
         private void version_edit_KeyPress(object sender, KeyPressEventArgs e)
@@ -201,10 +239,11 @@ namespace MMCS_LHM
             Application.Exit();
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void Form1_HelpButtonClicked(object sender, System.ComponentModel.CancelEventArgs e)
         {
             HelpPage hp = new HelpPage();
             hp.Show();
+            e.Cancel = true;
         }
 
         private void getHeader(OpenFileDialog file, ListView list, string cheader)
@@ -304,7 +343,7 @@ namespace MMCS_LHM
                 }
 
                 ListViewItem item1 = new ListViewItem((i + 1).ToString());
-                if (Array.IndexOf(this.hi.changed_id, i) != -1) item1.ForeColor = Color.Red;
+                if (view.Name == "listView1" && Array.IndexOf(this.hi.changed_id, i) != -1) item1.ForeColor = Color.Red;
                 item1.SubItems.Add(mname);
                 item1.SubItems.Add(mver);
                 if (view.Name == "listView1")
@@ -330,9 +369,21 @@ namespace MMCS_LHM
 
         private void Info(String text)
         {
-            this.textBox1.Text += text;
-            this.textBox1.Text += "\r\n----------------\r\n";
+            this.textBox1.Text = text;
+
+            this.timer1.Start();
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.blinkCount++;
+            int odd = this.blinkCount % 2;
+            this.textBox1.Font = (odd == 0) ? new Font(this.textBox1.Font, FontStyle.Bold) : new Font(this.textBox1.Font, FontStyle.Regular);
+            if (this.blinkCount == this.maxNumberOfBlinks)
+            {
+                this.blinkCount = 0;
+                this.timer1.Stop();
+            }
+        }
     }
 }
