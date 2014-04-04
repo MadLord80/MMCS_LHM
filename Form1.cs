@@ -30,10 +30,10 @@ namespace MMCS_LHM
 
         private void fill_models()
         {
-            foreach (DictionaryEntry entry in this.hi.models)
+            foreach (Object[] model in this.hi.models)
             {
-                ListViewItem item1 = new ListViewItem((string)entry.Key);
-                item1.SubItems.Add((string)entry.Value);
+                ListViewItem item1 = new ListViewItem((string)model.GetValue(0));
+                item1.SubItems.Add((string)model.GetValue(1));
                 item1.SubItems.Add("");
                 this.listView2.Items.Add(item1);
             }

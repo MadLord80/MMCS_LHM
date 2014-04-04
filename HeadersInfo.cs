@@ -15,18 +15,21 @@ namespace MMCS_LHM
         public byte[] hnew = new byte[0];
         public int[] changed_id = new int[0];
 
-        public Hashtable models = new Hashtable();
-
+        public Object[] models = {
+            new Object[]{"C-01 - C-02", "NR261EM_CTR.MLD.ORG"},
+            new Object[]{"E-01 - E-06", "NR261EM.MLD.ORG"},
+            new Object[]{"N-01 - N-05", "NR261UM.MLD.ORG"},
+            new Object[]{"P-01 - P-02", "NR261EM_PUG.MLD.ORG"},
+            new Object[]{"R-01", "NR261EMR.MLD.ORG"},
+            new Object[]{"R-02 - R-03", "NR261RM.MLD.ORG"},
+            new Object[]{"J-01", "NR261JM.MLD.ORG"},
+            new Object[]{"J-02 - J-05", "NR261JM7.MLD.ORG"}
+        };
 
         private help_functions func = new help_functions();
 
         public HeadersInfo()
         {
-            this.models.Add("E-06", "NR261EM.MLD.ORG");
-            this.models.Add("N-04", "NR261UM.MLD.ORG");
-            this.models.Add("R-03", "NR261RM.MLD.ORG");
-            this.models.Add("J-01", "NR261JM.MLD.ORG");
-            this.models.Add("J-02/3/4", "NR261JM7.MLD.ORG");
         }
 
         public void set_hcurrent(byte[] bytes)

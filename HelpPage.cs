@@ -18,7 +18,12 @@ namespace MMCS_LHM
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("www.madlord.info/mmcs/");
+            System.Diagnostics.Process.Start("http://madlord.info/mmcs-loading-header-mod/");
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/MadLord80/MMCS_LHM");
         }
     }
 }
