@@ -24,7 +24,7 @@ namespace MMCS_LHM
             new Object[]{"R-02 - R-03", "NR261RM.MLD.ORG"},
             new Object[]{"J-01", "NR261JM.MLD.ORG"},
             new Object[]{"J-02 - J-04", "NR261JM7.MLD.ORG"},
-            new Object[]{"J-05", "NR261J11.MLD.ORG"}
+            new Object[]{"J-05 - J-06", "NR261J11.MLD.ORG"}
         };
 
         private help_functions func = new help_functions();
