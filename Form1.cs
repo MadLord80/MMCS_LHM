@@ -340,6 +340,7 @@ namespace MMCS_LHM
                     mstart += mstart;
                     this.func.spliceByteArray(header, ref temp, mmi_offset + 72, 4);
                     mlength = this.func.ByteArrayLEToInt(temp);
+                    mlength += mlength;
                 }
 
                 ListViewItem item1 = new ListViewItem((i + 1).ToString());
