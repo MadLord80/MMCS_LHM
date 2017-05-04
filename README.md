@@ -1,4 +1,4 @@
-# MMCS_LHM
+# MMCS_LHM - MMCS Loading Header Mod
 Mod header in LOADING.KWI for MMCS with WinCE
 
 Download - https://github.com/MadLord80/MMCS_LHM/tree/master/bin/Debug
